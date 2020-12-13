@@ -2,6 +2,7 @@ package com.coderone95.user.service.controller;
 
 import com.coderone95.user.service.entity.User;
 import com.coderone95.user.service.exceptions.UserGenericException;
+import com.coderone95.user.service.model.ErrorResponse;
 import com.coderone95.user.service.model.Status;
 import com.coderone95.user.service.model.SuccessResponse;
 import com.coderone95.user.service.service.UserService;
@@ -55,10 +56,11 @@ public class UserController {
             res.setStatus(new Status());
             return new ResponseEntity<>(res,HttpStatus.OK);
         }catch (Exception e){
-
+            ErrorResponse err = new ErrorResponse();
+            err.setMessage("ERROR while deleting user");
+            err.setStatus(new Status());
+            return new ResponseEntity<>(err,HttpStatus.BAD_REQUEST);
         }
-        return  null;
-
     }
 
 

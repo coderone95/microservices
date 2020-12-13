@@ -9,7 +9,6 @@ public class Status implements Serializable {
         return status;
     }
 
-    public Status(){this.status = "SUCCESS";}
 
 
     public void setStatus(String status) {
