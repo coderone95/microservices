@@ -6,6 +6,7 @@ import com.coderone95.user.service.entity.User;
 import com.coderone95.user.service.entity.UserLoginData;
 import com.coderone95.user.service.repository.FunctionalityMappingRepository;
 import com.coderone95.user.service.repository.RolePrivilegesMappingRepository;
+import com.coderone95.user.service.repository.UserLoginDataRepository;
 import com.coderone95.user.service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service("userService")
@@ -27,6 +29,9 @@ public class UserService {
 
     @Autowired
     private RolePrivilegesMappingRepository rolePrivilegesMappingRepository;
+
+    @Autowired
+    private UserLoginDataRepository userLoginDataRepository;
 
     public User save(User user) {
         if(user.getCreatedOn() == null){
@@ -81,5 +86,10 @@ public class UserService {
 
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public UserLoginData getUserLoginDataByUserName(String username) {
+        Optional<UserLoginData> userLoginData = userLoginDataRepository.findByLoginId(username);
+        return userLoginData.get();
     }
 }
