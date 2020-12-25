@@ -28,4 +28,9 @@ public class ErrorResponse  {
     public ErrorResponse(String message){
         this.message = message;
     }
+    public ErrorResponse(String message, String statusCode){
+        this.message = message;
+        Status status = new Status(statusCode);
+        this.status = status;
+    }
 }

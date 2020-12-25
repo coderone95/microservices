@@ -3,11 +3,12 @@ package com.coderone95.user.service.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tbl_user_login_data")
-public class UserLoginData {
+public class UserLoginData implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

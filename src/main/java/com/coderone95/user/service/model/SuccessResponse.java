@@ -27,4 +27,9 @@ public class SuccessResponse {
     public SuccessResponse(String message){
         this.message = message;
     }
+    public SuccessResponse(String message, String statusMsg){
+        this.message = message;
+        Status status = new Status(statusMsg);
+        this.status = status;
+    }
 }

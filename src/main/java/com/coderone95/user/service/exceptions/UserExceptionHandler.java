@@ -1,7 +1,9 @@
 package com.coderone95.user.service.exceptions;
 
 import com.coderone95.user.service.model.ErrorDetails;
+import com.coderone95.user.service.model.ErrorResponse;
 import com.coderone95.user.service.model.ExceptionDetails;
+import com.coderone95.user.service.model.Status;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +22,13 @@ import java.util.stream.Collectors;
 @RestController
 public class UserExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UserGenericException.class)
-    public ResponseEntity<ExceptionDetails> genericExceptionForRole(UserGenericException ex, WebRequest req){
-        ExceptionDetails exception = new ExceptionDetails(new Date(),ex.getMessage(), req.getDescription(false));
-        return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> genericExceptionForRole(UserGenericException ex, WebRequest req){
+        ErrorResponse err = new ErrorResponse();
+        err.setMessage(ex.getMessage());
+        Status status = new Status();
+        status.setStatus("ERROR");
+        err.setStatus(status);
+        return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
     }
 
     @Override

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -84,6 +85,19 @@ public class UserService {
         return userRepository.save(data);
     }
 
+    public void updateUser(Long id, String flag){
+        User user = userRepository.findById(id).get();
+        UserLoginData userLoginData  = user.getUserLoginData();
+        if(flag.equalsIgnoreCase("ENABLE")){
+            userLoginData.setDisabled(false);
+        }else{
+            userLoginData.setDisabled(true);
+        }
+        userLoginData.setUpdatedOn(LocalDateTime.now());
+        userLoginData.getUser().setUpdatedOn(LocalDateTime.now());
+        userLoginDataRepository.save(userLoginData);
+    }
+
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
     }
@@ -91,5 +105,41 @@ public class UserService {
     public UserLoginData getUserLoginDataByUserName(String username) {
         Optional<UserLoginData> userLoginData = userLoginDataRepository.findByLoginId(username);
         return userLoginData.get();
+    }
+
+    public UserLoginData getUserByLoginId(String loginId) {
+        UserLoginData loginData = userLoginDataRepository.findByLoginId(loginId).get();
+        return loginData;
+    }
+
+    public boolean isUserExistsByLoginId(String loginId) {
+        UserLoginData loginData = userLoginDataRepository.getUserByLoginId(loginId);
+        if(loginData == null){
+            return false;
+        }
+        return true;
+    }
+
+    public void updateUserPassword(String loginId, String newPassword) {
+        UserLoginData loginData = getUserByLoginId(loginId);
+        loginData.setUpdatedOn(LocalDateTime.now());
+        loginData.getUser().setUpdatedOn(LocalDateTime.now());
+        userRepository.save(loginData.getUser());
+    }
+
+    public boolean isValidLoginCred(String loginId, String password) {
+        UserLoginData userLoginData = userLoginDataRepository.findByLoginIdAndPassword(loginId,password);
+        if(userLoginData == null){
+            return  false;
+        }
+        return true;
+    }
+
+    public boolean isUserIsDisabled(String loginId) {
+        UserLoginData userLoginData = getUserByLoginId(loginId);
+        if(userLoginData.getDisabled()){
+            return true;
+        }
+        return false;
     }
 }
